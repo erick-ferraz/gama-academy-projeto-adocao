@@ -1,6 +1,6 @@
 package com.academy.gama.projeto.adocao.repository;
 
-import com.academy.gama.projeto.adocao.model.Match;
+import com.academy.gama.projeto.adocao.model.entity.Match;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

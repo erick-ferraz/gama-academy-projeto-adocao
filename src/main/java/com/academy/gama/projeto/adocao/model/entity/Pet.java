@@ -1,12 +1,9 @@
-package com.academy.gama.projeto.adocao.model;
+package com.academy.gama.projeto.adocao.model.entity;
 
-import com.academy.gama.projeto.adocao.model.enums.PetSize;
-import com.academy.gama.projeto.adocao.model.enums.PetType;
-import com.academy.gama.projeto.adocao.model.enums.Sex;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +11,7 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Pet {
 
     @Id
@@ -24,18 +22,23 @@ public class Pet {
     @Column(name = "nome")
     private String name;
 
-    @Column(name = "tipo")
+    @JoinColumn(name = "id_type")
+    @ManyToOne
     private PetType petType;
 
-    @Column(name = "porte")
+    @JoinColumn(name = "id_size")
+    @ManyToOne
     private PetSize petSize;
 
-    @Column(name = "cor")
-    private String color;
+    @JoinColumn(name = "id_color")
+    @ManyToOne
+    private PetColor petColor;
 
-    @Column(name = "sexo")
-    private Sex sex;
+    @JoinColumn(name = "id_sex")
+    @ManyToOne
+    private PetSex petSex;
 
     @Column(name = "idade")
     private Integer age;
+
 }

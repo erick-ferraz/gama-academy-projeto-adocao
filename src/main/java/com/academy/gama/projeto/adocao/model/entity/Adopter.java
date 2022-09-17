@@ -1,16 +1,19 @@
-package com.academy.gama.projeto.adocao.model;
+package com.academy.gama.projeto.adocao.model.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "adotante")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Adopter {
 
     @Id
@@ -29,4 +32,7 @@ public class Adopter {
 
     @Column(name = "endereco")
     private String address;
+
+    @OneToMany(mappedBy = "adopter", cascade = CascadeType.PERSIST)
+    private List<Preferences> preferences;
 }

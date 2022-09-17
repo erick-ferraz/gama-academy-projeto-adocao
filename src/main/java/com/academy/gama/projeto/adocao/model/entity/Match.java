@@ -1,4 +1,4 @@
-package com.academy.gama.projeto.adocao.model;
+package com.academy.gama.projeto.adocao.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,10 +19,10 @@ public class Match {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_pet")
+    @JoinColumn(name = "id_pet_fk")
     private Pet pet;
 
     @ManyToOne
-    @JoinColumn(name = "id_adotante")
+    @JoinColumn(name = "id_adotante_fk")
     private Adopter adopter;
 }
