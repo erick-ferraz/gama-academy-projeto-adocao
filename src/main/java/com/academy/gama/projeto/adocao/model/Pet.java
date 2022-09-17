@@ -3,11 +3,12 @@ package com.academy.gama.projeto.adocao.model;
 import com.academy.gama.projeto.adocao.model.enums.PetSize;
 import com.academy.gama.projeto.adocao.model.enums.PetType;
 import com.academy.gama.projeto.adocao.model.enums.Sex;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 @Entity
 @Table(name = "pet")
@@ -38,4 +39,5 @@ public class Pet {
 
     @Column(name = "idade")
     private Integer age;
+
 }

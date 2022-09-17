@@ -19,10 +19,10 @@ public class Match {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_pet")
+    @JoinColumn(name = "id_pet_fk")
     private Pet pet;
 
     @ManyToOne
-    @JoinColumn(name = "id_adotante")
+    @JoinColumn(name = "id_adotante_fk")
     private Adopter adopter;
 }

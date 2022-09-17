@@ -37,6 +37,6 @@ public class Preferences {
     private Integer age;
 
     @ManyToOne
-    @JoinColumn(name = "id_adotante")
+    @JoinColumn(name = "id_adotante_fk")
     private Adopter adopter;
 }
