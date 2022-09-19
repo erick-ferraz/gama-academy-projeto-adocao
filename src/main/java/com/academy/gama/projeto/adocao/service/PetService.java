@@ -5,11 +5,12 @@ import com.academy.gama.projeto.adocao.dto.PetResponseDto;
 import com.academy.gama.projeto.adocao.model.entity.Pet;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PetService {
     Pet createPet(PetDto pet);
 
-    List<PetResponseDto> list();
+    Optional<List<Pet>> list();
 
-    List<PetResponseDto> getPetByType(String tipo);
+    Optional<List<Pet>>  getPetByType(String tipo);
 }
