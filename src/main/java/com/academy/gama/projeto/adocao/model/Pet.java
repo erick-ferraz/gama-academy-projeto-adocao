@@ -6,9 +6,6 @@ import com.academy.gama.projeto.adocao.model.enums.Sex;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
 
 @Entity
 @Table(name = "pet")

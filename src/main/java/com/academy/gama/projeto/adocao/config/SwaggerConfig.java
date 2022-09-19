@@ -23,14 +23,13 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        ApiInfo apiInfo = new ApiInfoBuilder()
+
+        return new ApiInfoBuilder()
                 .title("API Adoção de pets")
                 .description("API de Adoção de Pets desenvolvida para o bootcamp Dev for Tech da Gama Academy \n " +
                         "Desenvolvedores: Erick Ferraz, Priscilla Alves, Estom Jr")
                 .termsOfServiceUrl("/service.html")
                 .version("0.0.0")
                 .build();
-
-        return apiInfo;
     }
 }
