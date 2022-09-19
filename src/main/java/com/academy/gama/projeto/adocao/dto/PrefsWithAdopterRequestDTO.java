@@ -7,11 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdopterRequestDTO {
+public class PrefsWithAdopterRequestDTO {
 
-    private String nome;
-    private String cpf;
+    private String tipoPet;
+    private String portePet;
+    private String cor;
+    private String sexo;
     private Integer idade;
-    private String endereco;
+    private String cpfAdotante;
 
 }

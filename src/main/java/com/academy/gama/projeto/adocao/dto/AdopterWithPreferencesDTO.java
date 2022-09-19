@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdopterRequestDTO {
+public class AdopterWithPreferencesDTO {
 
     private String nome;
     private String cpf;
     private Integer idade;
     private String endereco;
-
+    private PreferencesDTO preferencias;
 }

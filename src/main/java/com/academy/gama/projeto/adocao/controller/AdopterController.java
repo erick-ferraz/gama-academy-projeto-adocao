@@ -2,6 +2,7 @@ package com.academy.gama.projeto.adocao.controller;
 
 import com.academy.gama.projeto.adocao.dto.AdopterRequestDTO;
 import com.academy.gama.projeto.adocao.dto.AdopterResponseDTO;
+import com.academy.gama.projeto.adocao.dto.AdopterWithPreferencesDTO;
 import com.academy.gama.projeto.adocao.service.AdopterService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -17,7 +18,7 @@ import java.util.List;
 @RequestMapping("/adotantes")
 public class AdopterController {
 
-    private AdopterService service;
+    AdopterService service;
 
     public AdopterController(AdopterService service) {
         this.service = service;
@@ -32,7 +33,7 @@ public class AdopterController {
             @ApiResponse(code = 403, message = "Acesso negado"),
             @ApiResponse(code = 409, message = "Adotante já cadastrado"),
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
-    public ResponseEntity<AdopterResponseDTO> insert(@RequestBody AdopterRequestDTO dto) {
+    public ResponseEntity<AdopterResponseDTO> insert(@RequestBody AdopterWithPreferencesDTO dto) {
         AdopterResponseDTO adopter = service.insert(dto);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
