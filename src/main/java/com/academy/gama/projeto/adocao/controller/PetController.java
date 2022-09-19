@@ -1,16 +1,13 @@
 package com.academy.gama.projeto.adocao.controller;
 
-import com.academy.gama.projeto.adocao.dto.AdopterRequestDTO;
-import com.academy.gama.projeto.adocao.dto.AdopterResponseDTO;
 import com.academy.gama.projeto.adocao.dto.PetDto;
 import com.academy.gama.projeto.adocao.dto.PetResponseDto;
-import com.academy.gama.projeto.adocao.model.entity.Pet;
-import com.academy.gama.projeto.adocao.service.AdopterService;
+import com.academy.gama.projeto.adocao.dto.PetResponseListDto;
+import com.academy.gama.projeto.adocao.model.Pet;
 import com.academy.gama.projeto.adocao.service.PetService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +33,7 @@ public class PetController {
             @ApiResponse(code = 403, message = "Acesso negado"),
             @ApiResponse(code = 409, message = "Adotante já cadastrado"),
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
-    public ResponseEntity<Pet> create(@RequestBody PetDto pet) {
+    public ResponseEntity<PetResponseDto> create(@RequestBody PetDto pet) {
         return ResponseEntity.ok().body(service.createPet(pet));
     }
 
@@ -48,7 +45,7 @@ public class PetController {
             @ApiResponse(code = 401, message = "Usuário inválido"),
             @ApiResponse(code = 403, message = "Acesso negado"),
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
-    public ResponseEntity<Optional<List<Pet>>> list() {
+    public ResponseEntity<List<PetResponseDto>> list() {
         return ResponseEntity.ok().body(service.list());
     }
 
@@ -61,7 +58,7 @@ public class PetController {
             @ApiResponse(code = 403, message = "Acesso negado"),
             @ApiResponse(code = 404, message = "Tipo de pet não encontrado"),
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
-    public ResponseEntity<Optional<List<Pet>>> getByType(
+    public ResponseEntity<List<PetResponseDto>> getByType(
             @PathVariable String tipo) {
         return ResponseEntity.ok().body(service.getPetByType(tipo));
     }

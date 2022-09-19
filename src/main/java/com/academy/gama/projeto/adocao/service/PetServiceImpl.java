@@ -1,14 +1,17 @@
 package com.academy.gama.projeto.adocao.service;
 
 import com.academy.gama.projeto.adocao.dto.PetDto;
-import com.academy.gama.projeto.adocao.model.entity.Pet;
-import com.academy.gama.projeto.adocao.model.entity.PetType;
+import com.academy.gama.projeto.adocao.dto.PetResponseDto;
+import com.academy.gama.projeto.adocao.dto.PetResponseListDto;
+import com.academy.gama.projeto.adocao.dto.PrefsWithAdopterResponseDTO;
+import com.academy.gama.projeto.adocao.model.Pet;
+import com.academy.gama.projeto.adocao.model.PetType;
 import com.academy.gama.projeto.adocao.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PetServiceImpl implements PetService {
@@ -29,8 +32,7 @@ public class PetServiceImpl implements PetService {
     public PetTypeService petTypeService;
 
     @Override
-    public Pet createPet(PetDto pet){
-
+    public PetResponseDto createPet(PetDto pet){
         Pet petEntity = Pet.builder()
                 .name(pet.getName())
                 .petType(petTypeService.getPetType(pet.getPetType()))
@@ -39,18 +41,21 @@ public class PetServiceImpl implements PetService {
                 .petSex(petSexService.getPetSex(pet.getSex()))
                 .age(pet.getAge())
                 .build();
-
-        return petRepository.save(petEntity);
+        petRepository.save(petEntity);
+        return new PetResponseDto(petEntity);
     }
 
-    public Optional<List<Pet>> list() {
-        Optional<List<Pet>> petList = Optional.of(petRepository.findAll());
-        return petList;
+    public List<PetResponseDto> list() {
+        return petRepository.findAll().stream()
+                .map(PetResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<List<Pet>>  getPetByType(String tipo) {
+    public List<PetResponseDto> getPetByType(String tipo) {
         PetType petType = petTypeService.getPetType(tipo);
-        return petRepository.findByPetType(petType);
+        return petRepository.findByPetType(petType).stream()
+                .map(PetResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
