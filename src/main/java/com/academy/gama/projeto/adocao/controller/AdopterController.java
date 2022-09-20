@@ -41,6 +41,12 @@ public class AdopterController {
         adopter.add(linkTo(methodOn(AdopterController.class)
                 .getByCpf(String.valueOf(adopter.getCpf()))).withSelfRel());
 
+        adopter.add(linkTo(methodOn(AdopterController.class)
+                .list()).withRel("lista de adotantes"));
+
+        adopter.add(linkTo(methodOn(PreferencesController.class)
+                .getByCpf(adopter.getCpf())).withRel("preferencias do adotante"));
+
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{cpf}")
                 .buildAndExpand(adopter.getCpf())
@@ -59,8 +65,13 @@ public class AdopterController {
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
     public ResponseEntity<List<AdopterResponseDTO>> list() {
         List<AdopterResponseDTO> list = service.list();
-        list.forEach(adopter -> adopter.add(linkTo(methodOn(AdopterController.class)
-                .getByCpf(String.valueOf(adopter.getCpf()))).withSelfRel()));
+        list.forEach(adopter -> {
+            adopter.add(linkTo(methodOn(AdopterController.class)
+                    .getByCpf(String.valueOf(adopter.getCpf()))).withSelfRel());
+
+            adopter.add(linkTo(methodOn(PreferencesController.class)
+                    .getByCpf(adopter.getCpf())).withRel("preferencias do adotante"));
+        });
         return ResponseEntity.ok().body(list);
     }
 
@@ -76,7 +87,11 @@ public class AdopterController {
     public ResponseEntity<AdopterResponseDTO> getByCpf(@PathVariable String cpf) {
         AdopterResponseDTO adopter = service.getAdopterByCpf(cpf);
         adopter.add(linkTo(methodOn(AdopterController.class)
-                .list()).withRel("Lista de adotantes"));
+                .list()).withRel("lista de adotantes"));
+
+        adopter.add(linkTo(methodOn(PreferencesController.class)
+                .getByCpf(adopter.getCpf())).withRel("preferencias do adotante"));
+
         return ResponseEntity.ok().body(adopter);
     }
 
@@ -92,7 +107,11 @@ public class AdopterController {
     public ResponseEntity<AdopterResponseDTO> updateByCpf(@PathVariable String cpf, @RequestBody AdopterRequestDTO dto) {
         AdopterResponseDTO adopter = service.updateByCpf(cpf, dto);
         adopter.add(linkTo(methodOn(AdopterController.class)
+                .getByCpf(adopter.getCpf())).withSelfRel());
+
+        adopter.add(linkTo(methodOn(AdopterController.class)
                 .list()).withRel("Lista de adotantes"));
+
         return ResponseEntity.ok().body(adopter);
     }
 
@@ -105,7 +124,7 @@ public class AdopterController {
             @ApiResponse(code = 403, message = "Acesso negado"),
             @ApiResponse(code = 404, message = "CPF do adotante não encontrado"),
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
-    public ResponseEntity<String> deleteById(@PathVariable String cpf) {
+    public ResponseEntity<Void> deleteByCpf(@PathVariable String cpf) {
         service.deleteByCpf(cpf);
         return ResponseEntity.noContent().build();
     }
