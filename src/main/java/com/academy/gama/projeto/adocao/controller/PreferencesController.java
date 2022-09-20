@@ -39,6 +39,12 @@ public class PreferencesController {
         prefs.add(linkTo(methodOn(PreferencesController.class)
                 .getById(String.valueOf(prefs.getId()))).withSelfRel());
 
+        prefs.add(linkTo(methodOn(AdopterController.class)
+                .getByCpf(prefs.getCpf())).withRel("adotante"));
+
+        prefs.add(linkTo(methodOn(PreferencesController.class)
+                .list()).withRel("lista de preferencias"));
+
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(prefs.getCpf())
@@ -57,8 +63,14 @@ public class PreferencesController {
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
     public ResponseEntity<List<PrefsWithAdopterResponseDTO>> list() {
         List<PrefsWithAdopterResponseDTO> list = service.list();
-        list.forEach(pref -> pref.add(linkTo(methodOn(PreferencesController.class)
-                .getById(String.valueOf(pref.getId()))).withSelfRel()));
+        list.forEach(pref -> {
+            pref.add(linkTo(methodOn(PreferencesController.class)
+                    .getById(String.valueOf(pref.getId()))).withSelfRel());
+
+            pref.add(linkTo(methodOn(AdopterController.class)
+                    .getByCpf(pref.getCpf())).withRel("adotante"));
+        });
+
         return ResponseEntity.ok().body(list);
     }
 
@@ -73,8 +85,17 @@ public class PreferencesController {
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
     public ResponseEntity<List<PrefsWithAdopterResponseDTO>> getByCpf(@PathVariable String cpf) {
         List<PrefsWithAdopterResponseDTO> prefsList = service.getByAdopterCpf(cpf);
-        prefsList.forEach(pref -> pref.add(linkTo(methodOn(PreferencesController.class)
-                .getById(String.valueOf(pref.getId()))).withSelfRel()));
+        prefsList.forEach(pref -> {
+            pref.add(linkTo(methodOn(PreferencesController.class)
+                    .getById(String.valueOf(pref.getId()))).withSelfRel());
+
+            pref.add(linkTo(methodOn(AdopterController.class)
+                    .getByCpf(pref.getCpf())).withRel("adotante"));
+
+            pref.add(linkTo(methodOn(PreferencesController.class)
+                    .list()).withRel("lista de preferências"));
+        });
+
         return ResponseEntity.ok().body(prefsList);
     }
 
@@ -91,6 +112,10 @@ public class PreferencesController {
         PrefsWithAdopterResponseDTO prefs = service.getById(id);
         prefs.add(linkTo(methodOn(PreferencesController.class)
                 .list()).withRel("Lista de preferências"));
+
+        prefs.add(linkTo(methodOn(AdopterController.class)
+                .getByCpf(prefs.getCpf())).withRel("adotante"));
+
         return ResponseEntity.ok().body(prefs);
     }
 
@@ -107,7 +132,11 @@ public class PreferencesController {
                                                                   @RequestBody PrefsWithAdopterRequestDTO dto) {
         PrefsWithAdopterResponseDTO prefs = service.updateById(id, dto);
         prefs.add(linkTo(methodOn(PreferencesController.class)
-                .list()).withRel("Lista de preferências"));
+                .getById(String.valueOf(prefs.getId()))).withSelfRel());
+
+        prefs.add(linkTo(methodOn(PreferencesController.class)
+                .list()).withRel("lista de preferências"));
+
         return ResponseEntity.ok().body(prefs);
     }
 
@@ -120,7 +149,7 @@ public class PreferencesController {
             @ApiResponse(code = 403, message = "Acesso negado"),
             @ApiResponse(code = 404, message = "ID da preferência não encontrado"),
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
-    public ResponseEntity<String> deleteById(@PathVariable String id) {
+    public ResponseEntity<Void> deleteById(@PathVariable String id) {
         service.deleteById(id);
         return ResponseEntity.noContent().build();
     }
