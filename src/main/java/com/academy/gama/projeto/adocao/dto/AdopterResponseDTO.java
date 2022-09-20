@@ -5,6 +5,7 @@ import com.academy.gama.projeto.adocao.model.Preferences;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdopterResponseDTO {
+public class AdopterResponseDTO extends RepresentationModel<AdopterResponseDTO> {
 
     private String nome;
     private String cpf;

@@ -13,6 +13,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 @RestController
 @RequestMapping("/preferencias")
 public class PreferencesController {
@@ -34,6 +36,8 @@ public class PreferencesController {
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
     public ResponseEntity<PrefsWithAdopterResponseDTO> insert(@RequestBody PrefsWithAdopterRequestDTO dto) {
         PrefsWithAdopterResponseDTO prefs = service.insert(dto);
+        prefs.add(linkTo(methodOn(PreferencesController.class)
+                .getById(String.valueOf(prefs.getId()))).withSelfRel());
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -53,6 +57,8 @@ public class PreferencesController {
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
     public ResponseEntity<List<PrefsWithAdopterResponseDTO>> list() {
         List<PrefsWithAdopterResponseDTO> list = service.list();
+        list.forEach(pref -> pref.add(linkTo(methodOn(PreferencesController.class)
+                .getById(String.valueOf(pref.getId()))).withSelfRel()));
         return ResponseEntity.ok().body(list);
     }
 
@@ -66,7 +72,10 @@ public class PreferencesController {
             @ApiResponse(code = 404, message = "CPF do adotante não encontrado"),
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
     public ResponseEntity<List<PrefsWithAdopterResponseDTO>> getByCpf(@PathVariable String cpf) {
-        return ResponseEntity.ok().body(service.getByAdopterCpf(cpf));
+        List<PrefsWithAdopterResponseDTO> prefsList = service.getByAdopterCpf(cpf);
+        prefsList.forEach(pref -> pref.add(linkTo(methodOn(PreferencesController.class)
+                .getById(String.valueOf(pref.getId()))).withSelfRel()));
+        return ResponseEntity.ok().body(prefsList);
     }
 
     @GetMapping("/{id}")
@@ -79,7 +88,10 @@ public class PreferencesController {
             @ApiResponse(code = 404, message = "ID da preferência não encontrado"),
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
     public ResponseEntity<PrefsWithAdopterResponseDTO> getById(@PathVariable String id) {
-        return ResponseEntity.ok().body(service.getById(id));
+        PrefsWithAdopterResponseDTO prefs = service.getById(id);
+        prefs.add(linkTo(methodOn(PreferencesController.class)
+                .list()).withRel("Lista de preferências"));
+        return ResponseEntity.ok().body(prefs);
     }
 
     @PutMapping("/{id}")
@@ -93,7 +105,10 @@ public class PreferencesController {
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
     public ResponseEntity<PrefsWithAdopterResponseDTO> updateById(@PathVariable String id,
                                                                   @RequestBody PrefsWithAdopterRequestDTO dto) {
-        return ResponseEntity.ok().body(service.updateById(id, dto));
+        PrefsWithAdopterResponseDTO prefs = service.updateById(id, dto);
+        prefs.add(linkTo(methodOn(PreferencesController.class)
+                .list()).withRel("Lista de preferências"));
+        return ResponseEntity.ok().body(prefs);
     }
 
     @DeleteMapping("/{id}")

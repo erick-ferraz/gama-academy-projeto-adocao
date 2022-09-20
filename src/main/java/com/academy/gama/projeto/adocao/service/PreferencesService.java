@@ -67,8 +67,15 @@ public class PreferencesService {
         validateAdopterPreferencesDto(dto);
         Adopter adopter = adopterRepository.findByCpf(dto.getCpfAdotante()).get();
 
-        Preferences prefs = new Preferences();
-        setPrefs(dto, adopter, prefs);
+        Preferences prefs = Preferences.builder()
+                .petType(PetType.valueOf(dto.getTipoPet().toUpperCase()))
+                .petSize(PetSize.valueOf(dto.getPortePet().toUpperCase()))
+                .sex(Sex.valueOf(dto.getSexo().toUpperCase()))
+                .color(dto.getCor())
+                .age(dto.getIdade())
+                .adopter(adopter)
+                .build();
+
         preferencesRepository.save(prefs);
         return new PrefsWithAdopterResponseDTO(prefs);
     }
@@ -91,8 +98,14 @@ public class PreferencesService {
         Preferences prefs = preferencesRepository.findById(longId).get();
 
         prefs.setId(longId);
-        setPrefs(dto, adopter, prefs);
+        prefs.setPetType(PetType.valueOf(dto.getTipoPet().toUpperCase()));
+        prefs.setPetSize(PetSize.valueOf(dto.getPortePet().toUpperCase()));
+        prefs.setSex(Sex.valueOf(dto.getSexo().toUpperCase()));
+        prefs.setColor(dto.getCor());
+        prefs.setAge(dto.getIdade());
+        prefs.setAdopter(adopter);
         preferencesRepository.save(prefs);
+
         return new PrefsWithAdopterResponseDTO(prefs);
     }
 
@@ -107,14 +120,5 @@ public class PreferencesService {
             throw new EntityNotFoundException(ID_NOT_FOUND);
 
         preferencesRepository.deleteById(longId);
-    }
-
-    private void setPrefs(PrefsWithAdopterRequestDTO dto, Adopter adopter, Preferences prefs) {
-        prefs.setPetType(PetType.valueOf(dto.getTipoPet().toUpperCase()));
-        prefs.setPetSize(PetSize.valueOf(dto.getPortePet().toUpperCase()));
-        prefs.setSex(Sex.valueOf(dto.getSexo().toUpperCase()));
-        prefs.setColor(dto.getCor());
-        prefs.setAge(dto.getIdade());
-        prefs.setAdopter(adopter);
     }
 }
