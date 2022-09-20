@@ -57,11 +57,13 @@ public class AdopterService {
         if(adopterRepository.existsByCpf(cpf))
             throw new DuplicateException(DUPLICATED_ADOPTER);
 
-        Adopter adopter = new Adopter();
-        adopter.setName(dto.getNome());
-        adopter.setAge(dto.getIdade());
-        adopter.setCpf(cpf);
-        adopter.setAddress(dto.getEndereco());
+        Adopter adopter = Adopter.builder()
+                .name(dto.getNome())
+                .age(dto.getIdade())
+                .cpf(cpf)
+                .address(dto.getEndereco())
+                .build();
+
         adopterRepository.save(adopter);
 
         Preferences preferences = new Preferences();
@@ -73,6 +75,7 @@ public class AdopterService {
             preferences.setAge(dto.getPreferencias().getIdade());
         }
         preferences.setAdopter(adopter);
+
         preferencesRepository.save(preferences);
 
         return new AdopterResponseDTO(adopter, List.of(preferences));

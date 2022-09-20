@@ -14,6 +14,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/adotantes")
 public class AdopterController {
@@ -35,6 +38,8 @@ public class AdopterController {
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
     public ResponseEntity<AdopterResponseDTO> insert(@RequestBody AdopterWithPreferencesDTO dto) {
         AdopterResponseDTO adopter = service.insert(dto);
+        adopter.add(linkTo(methodOn(AdopterController.class)
+                .getByCpf(String.valueOf(adopter.getCpf()))).withSelfRel());
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{cpf}")
@@ -54,6 +59,8 @@ public class AdopterController {
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
     public ResponseEntity<List<AdopterResponseDTO>> list() {
         List<AdopterResponseDTO> list = service.list();
+        list.forEach(adopter -> adopter.add(linkTo(methodOn(AdopterController.class)
+                .getByCpf(String.valueOf(adopter.getCpf()))).withSelfRel()));
         return ResponseEntity.ok().body(list);
     }
 
@@ -67,7 +74,10 @@ public class AdopterController {
             @ApiResponse(code = 404, message = "CPF do adotante não encontrado"),
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
     public ResponseEntity<AdopterResponseDTO> getByCpf(@PathVariable String cpf) {
-        return ResponseEntity.ok().body(service.getAdopterByCpf(cpf));
+        AdopterResponseDTO adopter = service.getAdopterByCpf(cpf);
+        adopter.add(linkTo(methodOn(AdopterController.class)
+                .list()).withRel("Lista de adotantes"));
+        return ResponseEntity.ok().body(adopter);
     }
 
     @PutMapping("/{cpf}")
@@ -80,7 +90,10 @@ public class AdopterController {
             @ApiResponse(code = 404, message = "CPF do adotante não encontrado"),
             @ApiResponse(code = 500, message = "Erro não esperado no servidor")})
     public ResponseEntity<AdopterResponseDTO> updateByCpf(@PathVariable String cpf, @RequestBody AdopterRequestDTO dto) {
-        return ResponseEntity.ok().body(service.updateByCpf(cpf, dto));
+        AdopterResponseDTO adopter = service.updateByCpf(cpf, dto);
+        adopter.add(linkTo(methodOn(AdopterController.class)
+                .list()).withRel("Lista de adotantes"));
+        return ResponseEntity.ok().body(adopter);
     }
 
     @DeleteMapping("/{cpf}")

@@ -4,11 +4,12 @@ import com.academy.gama.projeto.adocao.model.Preferences;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PrefsWithAdopterResponseDTO {
+public class PrefsWithAdopterResponseDTO extends RepresentationModel<PrefsWithAdopterResponseDTO> {
 
     private Long id;
     private String tipoPet;
