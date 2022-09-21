@@ -2,6 +2,7 @@ package com.academy.gama.projeto.adocao.model;
 
 import lombok.*;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "pet")
@@ -16,7 +17,7 @@ public class Pet {
     @Column(name = "id_pet")
     private Long id;
 
-    @Column(name = "nome")
+    @Column(name = "name")
     private String name;
 
     @JoinColumn(name = "id_type")
@@ -35,7 +36,10 @@ public class Pet {
     @ManyToOne
     private PetSex petSex;
 
-    @Column(name = "idade")
+    @Column(name = "age")
     private Integer age;
+
+    @Column(name = "was_adopted")
+    private boolean wasAdopted;
 
 }
