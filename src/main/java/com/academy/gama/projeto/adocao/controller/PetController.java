@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/pet")
+@RequestMapping("/pets")
 public class PetController {
 
     private PetService service;
